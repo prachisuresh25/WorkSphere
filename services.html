@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - WorkSphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Left Navigation Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h4>WorkSphere</h4>
+            <button id="sidebarToggle" class="btn-close"></button>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="services.html"><i class="fas fa-briefcase"></i> Services</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="how-it-works.html"><i class="fas fa-info-circle"></i> How It Works</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="complaints.html"><i class="fas fa-exclamation-triangle"></i> Complaints</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Top Header -->
+        <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container-fluid">
+                <button id="menuToggle" class="btn btn-outline-secondary me-3">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <div class="logo-icon me-2">W</div>
+                    <span class="fw-bold">WorkSphere</span>
+                </a>
+                
+                <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
+                    <select id="languageSelector" class="form-select form-select-sm me-3" style="width: auto;">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="mr">मराठी</option>
+                    </select>
+                    <button id="darkModeToggle" class="btn btn-outline-secondary btn-sm me-3" title="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <a href="login.html" class="btn btn-outline-primary btn-sm me-2">Login</a>
+                    <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section-small">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-bold" data-translate="browseServices">Browse All Services</h1>
+                    <p class="lead" data-translate="findPerfectProvider">Find the perfect service provider for your needs</p>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="search-container">
+                            <div class="row g-2">
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <input type="text" id="serviceSearch" class="form-control" placeholder="Search services..." data-translate-placeholder="searchServices">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                        <input type="text" id="locationSearch" class="form-control" placeholder="Location" data-translate-placeholder="location">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary w-100" onclick="searchServices()" data-translate="search">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Content -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <!-- Filters Sidebar -->
+                    <div class="col-lg-3 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0" data-translate="filters">Filters</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Category Filter -->
+                                <div class="mb-4">
+                                    <h6 data-translate="category">Category</h6>
+                                    <select id="categoryFilter" class="form-select">
+                                        <option value="" data-translate="allCategories">All Categories</option>
+                                        <option value="cleaning" data-translate="homeCleaning">Home Cleaning</option>
+                                        <option value="repair" data-translate="homeRepair">Home Repair</option>
+                                        <option value="tutoring" data-translate="tutoring">Tutoring</option>
+                                        <option value="beauty" data-translate="beautyServices">Beauty Services</option>
+                                        <option value="auto" data-translate="autoServices">Auto Services</option>
+                                        <option value="tech" data-translate="techSupport">Tech Support</option>
+                                    </select>
+                                </div>
+
+                                <!-- Price Range Filter -->
+                                <div class="mb-4">
+                                    <h6 data-translate="priceRange">Price Range</h6>
+                                    <select id="priceFilter" class="form-select">
+                                        <option value="" data-translate="anyPrice">Any Price</option>
+                                        <option value="0-500">₹0 - ₹500</option>
+                                        <option value="500-1000">₹500 - ₹1,000</option>
+                                        <option value="1000-2000">₹1,000 - ₹2,000</option>
+                                        <option value="2000+">₹2,000+</option>
+                                    </select>
+                                </div>
+
+                                <!-- Rating Filter -->
+                                <div class="mb-4">
+                                    <h6 data-translate="minRating">Minimum Rating</h6>
+                                    <select id="ratingFilter" class="form-select">
+                                        <option value="" data-translate="anyRating">Any Rating</option>
+                                        <option value="4">4+ Stars</option>
+                                        <option value="3">3+ Stars</option>
+                                        <option value="2">2+ Stars</option>
+                                    </select>
+                                </div>
+
+                                <!-- Sort By -->
+                                <div class="mb-4">
+                                    <h6 data-translate="sortBy">Sort By</h6>
+                                    <select id="sortFilter" class="form-select">
+                                        <option value="relevance" data-translate="relevance">Relevance</option>
+                                        <option value="rating" data-translate="rating">Rating</option>
+                                        <option value="price-low" data-translate="priceLowHigh">Price: Low to High</option>
+                                        <option value="price-high" data-translate="priceHighLow">Price: High to Low</option>
+                                    </select>
+                                </div>
+
+                                <button class="btn btn-outline-secondary w-100" onclick="clearFilters()" data-translate="clearFilters">Clear Filters</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services Grid -->
+                    <div class="col-lg-9">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 id="resultsCount" data-translate="showingResults">Showing all services</h5>
+                        </div>
+
+                        <div id="servicesGrid" class="row g-4">
+                            <!-- Services will be populated by JavaScript -->
+                            <!-- Example of a service item -->
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title" data-translate="serviceName">Service Name</h5>
+                                        <p class="card-text" data-translate="serviceDescription">Service Description</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="provider-price">Starting from ₹500</div>
+                                            <button class="btn btn-primary btn-sm" onclick="viewCategory('1')">
+                                                View Workers
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Results Message -->
+                        <div id="noResults" class="text-center py-5" style="display: none;">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h5 data-translate="noServicesFound">No services found</h5>
+                            <p class="text-muted" data-translate="tryDifferentFilters">Try adjusting your filters or search terms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-light py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>WorkSphere</h5>
+                        <p data-translate="footerDesc">Connecting you with trusted local service providers.</p>
+                    </div>
+                    <div class="col-md-2">
+                        <h6 data-translate="quickLinks">Quick Links</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="index.html" class="text-light" data-translate="home">Home</a></li>
+                            <li><a href="services.html" class="text-light" data-translate="services">Services</a></li>
+                            <li><a href="how-it-works.html" class="text-light" data-translate="howItWorks">How It Works</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <h6 data-translate="support">Support</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="complaints.html" class="text-light" data-translate="complaints">Complaints</a></li>
+                            <li><a href="#" class="text-light" data-translate="help">Help Center</a></li>
+                            <li><a href="#" class="text-light" data-translate="contact">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 data-translate="contactInfo">Contact Information</h6>
+                        <p><i class="fas fa-envelope"></i> Contact us through our support system</p>
+                        <p><i class="fas fa-phone"></i> Available through the platform</p>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <div class="text-center">
+                    <p>&copy; 2024 WorkSphere. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script src="services.js"></script>
+</body>
+</html>
