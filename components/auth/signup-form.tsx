@@ -6,6 +6,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react"
+import { authHelpers } from "@/lib/supabase"
+import { useRouter } from "next/navigation"
 
 export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -20,23 +22,73 @@ export function SignupForm() {
     agreeToTerms: false,
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match")
+      setError("Passwords do not match")
       setIsLoading(false)
       return
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("[v0] Signup attempt:", formData)
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long")
       setIsLoading(false)
-      // In a real app, handle registration here
-    }, 1000)
+      return
+    }
+
+    if (!formData.agreeToTerms) {
+      setError("Please agree to the Terms of Service and Privacy Policy")
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      // Create user with Supabase Auth
+      const { data, error: signUpError } = await authHelpers.signUp(
+        formData.email,
+        formData.password,
+        {
+          name: formData.name,
+          phone: formData.phone,
+          userType: formData.userType
+        }
+      )
+
+      if (signUpError) {
+        setError(signUpError.message)
+        setIsLoading(false)
+        return
+      }
+
+      if (data?.user) {
+        setSuccess(true)
+        
+        // Check if user needs to verify email
+        if (!data.session) {
+          setError("Please check your email to verify your account before signing in.")
+        } else {
+          // User is signed in immediately
+          console.log("User created and signed in:", data.user)
+          
+          // Redirect to dashboard or home page
+          setTimeout(() => {
+            router.push('/') // or wherever you want to redirect
+          }, 2000)
+        }
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
+      console.error("Signup error:", err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -58,6 +110,20 @@ export function SignupForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
+              Account created successfully! {!error && "Redirecting..."}
+            </div>
+          )}
+
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium text-gray-700">
               Full Name
