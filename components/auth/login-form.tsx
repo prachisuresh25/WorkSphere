@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
 import Link from "next/link"
+import { authHelpers } from "@/lib/supabase"
+import { useRouter } from "next/navigation"
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -15,17 +17,42 @@ export function LoginForm() {
     password: "",
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("[v0] Login attempt:", formData)
+    try {
+      const { data, error: signInError } = await authHelpers.signIn(
+        formData.email,
+        formData.password
+      )
+
+      if (signInError) {
+        setError(signInError.message)
+        setIsLoading(false)
+        return
+      }
+
+      if (data?.user) {
+        setSuccess(true)
+        console.log("User signed in:", data.user)
+        
+        // Redirect to dashboard or home page
+        setTimeout(() => {
+          router.push('/') // or wherever you want to redirect
+        }, 1000)
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
+      console.error("Login error:", err)
+    } finally {
       setIsLoading(false)
-      // In a real app, handle authentication here
-    }, 1000)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +73,20 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
+              Login successful! Redirecting...
+            </div>
+          )}
+
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium text-gray-700">
               Email Address
